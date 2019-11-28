@@ -53,8 +53,12 @@ function MiniPalette(props) {
       key={item.name}
     />
   ));
+
+  const handleClick = () => {
+    props.handleClick(props.id);
+  }
   return (
-    <div className={classes.root}>
+    <div className={classes.root} onClick={handleClick}>
       <div className={classes.colors}>
         {miniColorBoxes}
       </div>
