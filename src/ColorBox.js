@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Link } from "react-router-dom";
-import chroma from "chroma-js";
-import "./ColorBox.css";
+import classNames from "classnames";
+import styles from "./styles/ColorBoxStyles";
+import { withStyles } from "@material-ui/styles";
 
 class ColorBox extends Component {
   constructor(props) {
@@ -19,33 +20,37 @@ class ColorBox extends Component {
   };
 
   render() {
-    const { name, background, paletteId, id, showLink } = this.props;
+    const { name, background, paletteId, id, showLink, classes } = this.props;
     const { copied } = this.state;
-    const isDarkColor = chroma(background).luminance() <=0.08;
-    const isLightColor = chroma(background).luminance() >= 0.7;
     return (
       <CopyToClipboard text={background} onCopy={this.changeCopyState}>
-        <div style={{ background: background }} className="ColorBox">
+        <div style={{ background }} className={classes.ColorBox}>
           <div
-            style={{ background: background }}
-            className={`copy-overlay ${copied && "show"}`}
+            style={{ background }}
+            className={classNames(classes.copyOverlay, {
+              [classes.showOverlay]: copied
+            })}
           />
-          <div className={`copy-msg ${copied && "show"}`}>
+          <div
+            className={classNames(classes.copyMessage, {
+              [classes.showMessage]: copied
+            })}
+          >
             <h1>copied</h1>
-            <p className={isLightColor && "dark-text"}>{this.props.background}</p>
+            <p className={classes.copyText}>{background}</p>
           </div>
-          <div className="copy-container">
-            <div className="box-content">
-              <span className={isDarkColor && "light-text"}>{name}</span>
+          <div>
+            <div className={classes.boxContent}>
+              <span className={classes.colorName}>{name}</span>
             </div>
-            <button className={`copy-button ${isLightColor && "dark-text"}`}>Copy</button>
+            <button className={classes.copyButton}>Copy</button>
           </div>
           {showLink && (
             <Link
               to={`/palette/${paletteId}/${id}`}
               onClick={e => e.stopPropagation()}
             >
-              <span className={`see-more ${isLightColor && "dark-text"}`}>MORE</span>
+              <span className={classes.seeMore}>MORE</span>
             </Link>
           )}
         </div>
@@ -54,4 +59,4 @@ class ColorBox extends Component {
   }
 }
 
-export default ColorBox;
+export default withStyles(styles)(ColorBox);
