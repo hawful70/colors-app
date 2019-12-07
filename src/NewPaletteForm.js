@@ -20,12 +20,10 @@ const styles = theme => ({
   root: {
     display: "flex"
   },
-  hide: {
-    display: "none"
-  },
   drawer: {
     width: drawerWidth,
-    flexShrink: 0
+    flexShrink: 0,
+    height: "100vh"
   },
   drawerPaper: {
     width: drawerWidth,
@@ -35,6 +33,7 @@ const styles = theme => ({
   drawerHeader: {
     display: "flex",
     alignItems: "center",
+    width: "100%",
     padding: "0 8px",
     ...theme.mixins.toolbar,
     justifyContent: "flex-end"
@@ -42,7 +41,7 @@ const styles = theme => ({
   content: {
     flexGrow: 1,
     height: "calc(100vh - 64px)",
-    padding: theme.spacing(3),
+    padding: 0,
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
@@ -103,12 +102,9 @@ class NewPaletteForm extends React.Component {
     this.setState({ colors: [] });
   };
 
-  handleSubmit = newPaletteName => {
-    const newPalette = {
-      paletteName: newPaletteName,
-      id: newPaletteName.toLowerCase().replace(/ /g, "-"),
-      colors: this.state.colors
-    };
+  handleSubmit = newPalette => {
+    newPalette.id = newPalette.paletteName.toLowerCase().replace(/ /g, "-");
+    newPalette.colors = this.state.colors;
     this.props.savePalette(newPalette);
     this.props.history.push("/");
   };
@@ -155,7 +151,9 @@ class NewPaletteForm extends React.Component {
           </div>
           <Divider />
           <div className={classes.container}>
-            <Typography variant="h4" gutterBottom>Design Your Palette</Typography>
+            <Typography variant="h4" gutterBottom>
+              Design Your Palette
+            </Typography>
             <div className={classes.buttons}>
               <Button
                 variant="contained"
