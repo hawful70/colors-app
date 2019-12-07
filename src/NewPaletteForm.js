@@ -12,64 +12,8 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Button from "@material-ui/core/Button";
 import DraggableColorList from "./DraggableColorList";
 import { arrayMove } from "react-sortable-hoc";
+import styles from "./styles/NewPaletteFormStyles";
 import seedColors from "./seedColors";
-
-const drawerWidth = 400;
-
-const styles = theme => ({
-  root: {
-    display: "flex"
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-    height: "100vh"
-  },
-  drawerPaper: {
-    width: drawerWidth,
-    display: "flex",
-    alignItems: "center"
-  },
-  drawerHeader: {
-    display: "flex",
-    alignItems: "center",
-    width: "100%",
-    padding: "0 8px",
-    ...theme.mixins.toolbar,
-    justifyContent: "flex-end"
-  },
-  content: {
-    flexGrow: 1,
-    height: "calc(100vh - 64px)",
-    padding: 0,
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    }),
-    marginLeft: -drawerWidth
-  },
-  contentShift: {
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
-    }),
-    marginLeft: 0
-  },
-  container: {
-    width: "90%",
-    height: "100%",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  buttons: {
-    width: "100%"
-  },
-  button: {
-    width: "50%"
-  }
-});
 
 class NewPaletteForm extends React.Component {
   static defaultProps = {
@@ -94,7 +38,6 @@ class NewPaletteForm extends React.Component {
   addNewColor = newColor => {
     this.setState({
       colors: [...this.state.colors, newColor],
-      newColorName: ""
     });
   };
 
@@ -115,7 +58,21 @@ class NewPaletteForm extends React.Component {
     });
   };
 
-  addRandomColor = () => {};
+  addRandomColor = () => {
+    const allColors = this.props.palettes.map(p => p.colors).flat();
+    let rand;
+    let randomColor;
+    let isDuplicateColor = true;
+    while (isDuplicateColor) {
+      rand = Math.floor(Math.random() * allColors.length);
+      randomColor = allColors[rand];
+      isDuplicateColor = this.state.colors.some(
+        // eslint-disable-next-line no-loop-func
+        color => color.name === randomColor.name
+      );
+    }
+    this.setState({ colors: [...this.state.colors, randomColor] });
+  };
 
   onSortEnd = ({ oldIndex, newIndex }) => {
     this.setState(({ colors }) => ({
