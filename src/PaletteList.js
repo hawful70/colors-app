@@ -35,7 +35,7 @@ class PaletteList extends Component {
   handleDelete = () => {
     this.props.deletePalette(this.state.deletingId);
     this.closeDialog();
-  }
+  };
 
   render() {
     const { palettes, classes } = this.props;
@@ -44,7 +44,7 @@ class PaletteList extends Component {
       <div className={classes.root}>
         <div className={classes.container}>
           <nav className={classes.nav}>
-            <h1>React Color</h1>
+            <h1 className={classes.heading}>React Colors</h1>
             <Link to="/palette/new">Create Palette</Link>
           </nav>
           <div className={classes.palettes}>
